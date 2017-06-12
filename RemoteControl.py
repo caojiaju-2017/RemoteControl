@@ -4,6 +4,10 @@ from Comminucation.BluthWay import *
 from Comminucation.NetWay import *
 
 operatorDict = {1: NetWay.runTcp, 2: NetWay.runUdp, 3: BluthWay.run}
+
+def startCommandList():
+    pass
+
 def startMain():
     runWay = 0
     while True:
@@ -24,6 +28,11 @@ def startMain():
 
     # 启动服务
     operatorDict[runWay]()
+
+
+    #启动线程，监控前端控制指令
+    startCommandList()
+    
     pass
 
 if __name__ == "__main__":
