@@ -1,20 +1,38 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import  os
-from PIL import ImageGrab
+import  os,threading,time,io
+from PIL import ImageGrab,Image
 import matplotlib.pyplot as plt  # plt 用于显示图片
 import matplotlib.image as mpimg  # mpimg 用于读取图片
 import numpy as np
 
 
+
+FPS=10
+
 def snapDesktop():
-    im = ImageGrab.grab()
-    im.save(os.path.join(os.getcwd(),"abc.png"),"png")
-    lena = mpimg.imread(os.path.join(os.getcwd(),"abc.png"))
-    lena.shape #(512, 512, 3)
-    plt.imshow(lena) # 显示图片
-    plt.axis('off') # 不显示坐标轴
-    plt.show()
+    print "***********Start video collection***********"
+    timeSep = 1 / float(FPS)
+    while True:
+        im = ImageGrab.grab()
+        out = im.resize((im.size[0] / 2, im.size[1] / 2), Image.ANTIALIAS)  # resize image with high-quality
+
+        out.save(os.path.join(os.getcwd(), "abc.png"), "png")
+
+        imgByteArr = io.BytesIO()
+        out.save(imgByteArr,  "PNG")
+        imgByteArr = imgByteArr.getvalue()
+
+        time.sleep(timeSep)
+
+        break
+
+def startSnapThread(fps):
+    FPS = fps
+    commandListen = threading.Thread(target=snapDesktop, args=())
+    commandListen.daemon = True
+    commandListen.start()
+    pass
 
 if __name__ == "__main__":
     snapDesktop()

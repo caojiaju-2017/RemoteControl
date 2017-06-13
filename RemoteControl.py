@@ -2,11 +2,46 @@
 # -*- coding: utf-8 -*-
 from Comminucation.BluthWay import *
 from Comminucation.NetWay import *
+from Snap.WndSnap import *
+import threading,time
 
-operatorDict = {1: NetWay.runTcp, 2: NetWay.runUdp, 3: BluthWay.run}
+comminucationDictions = {1: NetWay.runTcp, 2: NetWay.runUdp, 3: BluthWay.run}
 
-def startCommandList():
+# 处理前端控制指令
+def startCommandListen():
+    commandListen = threading.Thread(target=startWorkThread, args=())
+    commandListen.daemon = True
+    commandListen.start()
     pass
+def startWorkThread():
+    print "***********Start Control Comman Listen***********"
+    while True:
+        print "adsf"
+        time.sleep(1)
+    pass
+# 处理前端控制指令======================end
+
+
+# 处理视频实时推送服务
+def startVideoService():
+    commandListen = threading.Thread(target=startVideoServiceChannel, args=())
+    commandListen.daemon = True
+    commandListen.start()
+    pass
+def startVideoServiceChannel():
+    print "***********Start Video Send Service***********"
+    while True:
+        print "adsf"
+        time.sleep(1)
+    pass
+# 处理视频实时推送服务======================end
+
+
+# 启动定时截图功能
+def startSnapService():
+    startSnapThread(10)
+    pass
+# 启动定时截图功能====end
 
 def startMain():
     runWay = 0
@@ -26,14 +61,28 @@ def startMain():
         else:
             continue
 
-    # 启动服务
-    operatorDict[runWay]()
+    # 截屏服务
+    startSnapService()
 
+    # 视频推送服务
+    startVideoService()
 
     #启动线程，监控前端控制指令
-    startCommandList()
-    
+    startCommandListen()
+
+    # 启动视频接入通信接口
+    comminucationDictions[runWay]()
+
+
+
     pass
+
+def waitTerminalSingal():
+    while True:
+        str = raw_input(u"请选择操作内容：\n    输入q,退出程序\n你的输入：")
+        if str.lower() == "q":
+            exit()
 
 if __name__ == "__main__":
     startMain()
+    waitTerminalSingal()
