@@ -2,46 +2,31 @@
 # -*- coding: utf-8 -*-
 from Comminucation.BluthWay import *
 from Comminucation.NetWay import *
-from Snap.WndSnap import *
-import threading,time
 
-comminucationDictions = {1: NetWay.runTcp, 2: NetWay.runUdp, 3: BluthWay.run}
+from GlobalDatas import *
+
+from Snap.WndSnap import *
+from Comminucation.WayInfo import *
+from GlobalDatas import *
+import threading,time,socket
+from socket import *
 
 # 处理前端控制指令
 def startCommandListen():
-    commandListen = threading.Thread(target=startWorkThread, args=())
+    commandListen = threading.Thread(target=NetWay.runSingleTcp, args=())
     commandListen.daemon = True
     commandListen.start()
-    pass
-def startWorkThread():
-    print "***********Start Control Comman Listen***********"
-    while True:
-        print "adsf"
-        time.sleep(1)
     pass
 # 处理前端控制指令======================end
 
 
 # 处理视频实时推送服务
 def startVideoService():
-    commandListen = threading.Thread(target=startVideoServiceChannel, args=())
+    commandListen = threading.Thread(target=NetWay.runVideoTcp, args=())
     commandListen.daemon = True
     commandListen.start()
     pass
-def startVideoServiceChannel():
-    print "***********Start Video Send Service***********"
-    while True:
-        print "adsf"
-        time.sleep(1)
-    pass
 # 处理视频实时推送服务======================end
-
-
-# 启动定时截图功能
-def startSnapService():
-    startSnapThread(10)
-    pass
-# 启动定时截图功能====end
 
 def startMain():
     runWay = 0
@@ -62,16 +47,16 @@ def startMain():
             continue
 
     # 截屏服务
-    startSnapService()
+    startSnapThread(10)
 
-    # 视频推送服务
-    startVideoService()
+    if str == "1":
+        # 视频推送服务
+        startVideoService()
+        #启动线程，监控前端控制指令
+        startCommandListen()
 
-    #启动线程，监控前端控制指令
-    startCommandListen()
-
-    # 启动视频接入通信接口
-    comminucationDictions[runWay]()
+    # # 启动视频接入通信接口
+    # comminucationDictions[runWay]()
 
 
 
@@ -79,9 +64,11 @@ def startMain():
 
 def waitTerminalSingal():
     while True:
-        str = raw_input(u"请选择操作内容：\n    输入q,退出程序\n你的输入：")
+        str = raw_input(u"请选择操作内容：\n    输入q,退出程序 \n    输入s,显示二维码\n你的输入：")
         if str.lower() == "q":
             exit()
+        elif str.lower() == "s":
+            WayInfo().make_qr("192.168.1.101:8009", os.path.join(os.getcwd(), "test.png"))
 
 if __name__ == "__main__":
     startMain()
