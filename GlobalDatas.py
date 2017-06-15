@@ -3,8 +3,12 @@
 
 import  thread
 
-CurrentPhoto = None
+
 dataAccessLock = thread.allocate_lock ()
+socketAccessLock = thread.allocate_lock ()
+
+imageSocketDictionary= {}
+singleSocketDictionary= {}
 
 ZoomRate = 0.5
 
@@ -17,12 +21,13 @@ VideoPort = 6001
 SinglePort = 6002
 
 class SnapDatas(object):
-    Fps = 10
-    # PhotoDictionary = {}
-    # currentIndex = 0
-
-    def getNewPhoto(self):
-        pass
-
-    def snapPhoto(self):
-        pass
+    CurrentPhoto = None
+    # Fps = 10
+    # # PhotoDictionary = {}
+    # # currentIndex = 0
+    #
+    # def getNewPhoto(self):
+    #     pass
+    #
+    # def snapPhoto(self):
+    #     pass

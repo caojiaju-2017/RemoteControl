@@ -31,7 +31,7 @@ def startVideoService():
 def startMain():
     runWay = 0
     while True:
-        str = raw_input(u"请选启动方式：\n    输入1,Tcp模式 \n    输入2,UDP模式\n    输入3,蓝牙模式\n    输入q,退出程序\n你的输入：")
+        str = raw_input(u"请选启动方式：\n    输入1,Tcp模式 \n    输入2,UDP模式\n    输入3,蓝牙模式\n    输入q,退出程序\n你的输入：\n")
         if str.lower() == "1":
             runWay = 1
             break
@@ -64,7 +64,7 @@ def startMain():
 
 def waitTerminalSingal():
     while True:
-        str = raw_input(u"请选择操作内容：\n    输入q,退出程序 \n    输入s,显示二维码\n你的输入：")
+        str = raw_input(u"请选择操作内容：\n    输入q,退出程序 \n    输入s,显示二维码\n你的输入：\n")
         if str.lower() == "q":
             exit()
         elif str.lower() == "s":

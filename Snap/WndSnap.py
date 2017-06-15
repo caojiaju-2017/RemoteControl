@@ -24,7 +24,7 @@ def snapDesktop():
         imgByteArr = imgByteArr.getvalue()
 
         dataAccessLock.acquire()  # 从这里进入线程安全区
-        CurrentPhoto = imgByteArr
+        SnapDatas.CurrentPhoto = imgByteArr
         dataAccessLock.release()  #
         time.sleep(timeSep)
 
